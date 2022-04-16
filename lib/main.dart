@@ -18,7 +18,6 @@ class MyApp extends StatelessWidget {
         appBarTheme: const AppBarTheme(backgroundColor: Palette.background),
         scaffoldBackgroundColor: Palette.background,
         primaryColor: Colors.white,
-        accentColor: Palette.green,
         iconTheme: const IconThemeData(color: Colors.black),
         fontFamily: GoogleFonts.montserrat().fontFamily,
         textTheme: GoogleFonts.montserratTextTheme(),
@@ -126,7 +125,6 @@ class Room {
   final String name;
   final String time;
   final List<User> speakers;
-  final List<User> followedBySpeakers;
   final List<User> others;
 
   const Room({
@@ -134,7 +132,6 @@ class Room {
     required this.name,
     this.time = '',
     this.speakers = const [],
-    this.followedBySpeakers = const [],
     this.others = const [],
   });
 }
@@ -162,21 +159,18 @@ final List<Room> roomsList = [
     club: 'Social Society',
     name: 'Welcome to Clubhouse 🎉 (Walkthrough with Q&A)',
     speakers: (List<User>.from(_allUsers)..shuffle()).getRange(0, 4).toList(),
-    followedBySpeakers: List<User>.from(_allUsers)..shuffle(),
     others: List<User>.from(_allUsers)..shuffle(),
   ),
   Room(
     club: 'Good Time',
     name: '⏰ A Very Important Person on Good Time',
     speakers: (List<User>.from(_allUsers)..shuffle()).getRange(0, 4).toList(),
-    followedBySpeakers: List<User>.from(_allUsers)..shuffle(),
     others: List<User>.from(_allUsers)..shuffle(),
   ),
   Room(
     club: 'NYU girls roasting tech guys',
     name: 'love and bitcoin edition 💰',
     speakers: (List<User>.from(_allUsers)..shuffle()).getRange(0, 4).toList(),
-    followedBySpeakers: List<User>.from(_allUsers)..shuffle(),
     others: List<User>.from(_allUsers)..shuffle(),
   ),
 ];
@@ -195,43 +189,16 @@ class BackChannelRoom {
   });
 }
 
-final List<BackChannelRoom> backChannelRoomsList = [
-  BackChannelRoom(
-    profileImageUrl:
-        'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=634&q=80',
-    name: 'Jane Doe',
-    message: 'You: Hello!',
-    timestamp: '9:58 PM',
-  ),
-  BackChannelRoom(
-    profileImageUrl:
-        'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=634&q=80',
-    name: 'Jane Doe',
-    message: 'You: Hello!',
-    timestamp: '9:58 PM',
-  ),
-  BackChannelRoom(
-    profileImageUrl:
-        'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=634&q=80',
-    name: 'Jane Doe',
-    message: 'You: Hello!',
-    timestamp: '9:58 PM',
-  ),
-  BackChannelRoom(
-    profileImageUrl:
-        'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=634&q=80',
-    name: 'Jane Doe',
-    message: 'You: Hello!',
-    timestamp: '9:58 PM',
-  ),
-  BackChannelRoom(
-    profileImageUrl:
-        'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=634&q=80',
-    name: 'Jane Doe',
-    message: 'You: Hello!',
-    timestamp: '9:58 PM',
-  ),
-];
+final List<BackChannelRoom> backChannelRoomsList =
+    (List<User>.from(_allUsers)..shuffle())
+        .getRange(0, 4)
+        .map((user) => BackChannelRoom(
+              profileImageUrl: user.imageUrl,
+              name: user.givenName + ' ' + user.familyName,
+              message: 'You: Hello!',
+              timestamp: '9:58 PM',
+            ))
+        .toList();
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -293,27 +260,9 @@ class HomeScreen extends StatelessWidget {
             padding: const EdgeInsets.fromLTRB(20.0, 20.0, 20.0, 120.0),
             children: [
               UpcomingRooms(upcomingRooms: upcomingRoomsList),
-              const SizedBox(height: 12.0),
-              ...roomsList.map((e) => RoomCard(room: e)),
+              SizedBox(height: 12.0),
+              ...roomsList.map((room) => RoomCard(room: room)),
             ],
-          ),
-          Positioned(
-            left: 0,
-            right: 0,
-            bottom: 0,
-            child: Container(
-              height: 100.0,
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                    Theme.of(context).scaffoldBackgroundColor.withOpacity(0.1),
-                    Theme.of(context).scaffoldBackgroundColor
-                  ],
-                ),
-              ),
-            ),
           ),
           Positioned(
             bottom: 60.0,
@@ -336,7 +285,7 @@ class HomeScreen extends StatelessWidget {
                     width: 16.0,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: Theme.of(context).colorScheme.secondary,
+                      color: Palette.green,
                     ),
                   ),
                 )
@@ -348,7 +297,7 @@ class HomeScreen extends StatelessWidget {
             child: Container(
               padding: const EdgeInsets.all(12.0),
               decoration: BoxDecoration(
-                color: Theme.of(context).accentColor,
+                color: Palette.green,
                 borderRadius: BorderRadius.circular(24.0),
               ),
               child: const Text.rich(
@@ -401,14 +350,17 @@ class HomeScreen extends StatelessWidget {
 }
 
 class UserProfileImage extends StatelessWidget {
-  const UserProfileImage({Key? key, required this.imageURL, this.size = 48.0})
-      : super(key: key);
+  const UserProfileImage({
+    Key? key,
+    required this.imageURL,
+    this.size = 48.0,
+  }) : super(key: key);
   final String imageURL;
   final double size;
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
-      borderRadius: BorderRadius.circular(size / 2 - size / 18),
+      borderRadius: BorderRadius.circular(size * 0.4),
       child: Image.network(
         imageURL,
         height: size,
@@ -436,41 +388,39 @@ class UpcomingRooms extends StatelessWidget {
         child: Column(
           children: upcomingRooms
               .map(
-                (e) => Padding(
+                (room) => Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Padding(
-                        padding:
-                            EdgeInsets.only(top: e.club.isNotEmpty ? 2.0 : 0),
-                        child: Text(e.time),
+                        padding: EdgeInsets.only(
+                            top: room.club.isNotEmpty ? 2.0 : 0),
+                        child: Text(room.time),
                       ),
-                      const SizedBox(
-                        width: 12.0,
-                      ),
+                      const SizedBox(width: 12.0),
                       Expanded(
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            if (e.club.isNotEmpty)
+                            if (room.club.isNotEmpty)
                               Flexible(
                                 child: Text(
-                                  '${e.club} 🏡'.toUpperCase(),
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .overline!
-                                      .copyWith(
-                                        fontWeight: FontWeight.w600,
-                                        letterSpacing: 1.0,
-                                      ),
+                                  '${room.club} 🏡'.toUpperCase(),
+                                  style: TextStyle(
+                                    fontSize: 11,
+                                    fontWeight: FontWeight.w600,
+                                    letterSpacing: 1.0,
+                                  ),
                                   overflow: TextOverflow.ellipsis,
                                 ),
                               ),
                             Flexible(
-                              child:
-                                  Text(e.name, overflow: TextOverflow.ellipsis),
+                              child: Text(
+                                room.name,
+                                overflow: TextOverflow.ellipsis,
+                              ),
                             )
                           ],
                         ),
@@ -492,111 +442,105 @@ class RoomCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {},
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 4.0),
-        child: Card(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20.0),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  '${room.club} 🏡'.toUpperCase(),
-                  style: Theme.of(context).textTheme.overline!.copyWith(
-                        fontSize: 12.0,
-                        fontWeight: FontWeight.w500,
-                        letterSpacing: 1.0,
-                      ),
-                  overflow: TextOverflow.ellipsis,
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4.0),
+      child: Card(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20.0),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                '${room.club} 🏡'.toUpperCase(),
+                style: TextStyle(
+                  fontSize: 12.0,
+                  fontWeight: FontWeight.w500,
+                  letterSpacing: 1.0,
                 ),
-                Text(
-                  room.name,
-                  style: Theme.of(context).textTheme.bodyText1!.copyWith(
-                        fontSize: 15.0,
-                        fontWeight: FontWeight.bold,
-                      ),
+                overflow: TextOverflow.ellipsis,
+              ),
+              Text(
+                room.name,
+                style: TextStyle(
+                  fontSize: 15.0,
+                  fontWeight: FontWeight.bold,
                 ),
-                const SizedBox(height: 12.0),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(
-                      child: Container(
-                        height: 100.0,
-                        child: Stack(
-                          children: [
-                            Positioned(
-                              left: 28.0,
-                              top: 20.0,
-                              child: UserProfileImage(
-                                imageURL: room.speakers[1].imageUrl,
-                                size: 48,
-                              ),
-                            ),
-                            UserProfileImage(
-                              imageURL: room.speakers[0].imageUrl,
-                              size: 48,
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      flex: 2,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+              ),
+              const SizedBox(height: 12.0),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: Container(
+                      height: 100.0,
+                      child: Stack(
                         children: [
-                          ...room.speakers.map(
-                            (e) => Text(
-                              '${e.givenName} ${e.familyName} 💬',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyText1!
-                                  .copyWith(fontSize: 16.0),
+                          Positioned(
+                            left: 28.0,
+                            top: 20.0,
+                            child: UserProfileImage(
+                              imageURL: room.speakers[1].imageUrl,
+                              size: 48,
                             ),
                           ),
-                          Padding(
-                            padding: const EdgeInsets.only(top: 4.0),
-                            child: Text.rich(
-                              TextSpan(
-                                children: [
-                                  TextSpan(
-                                      text:
-                                          '${room.speakers.length + room.followedBySpeakers.length + room.others.length} '),
-                                  const WidgetSpan(
-                                    child: Icon(
-                                      CupertinoIcons.person_fill,
-                                      size: 18.0,
-                                      color: Colors.grey,
-                                    ),
-                                  ),
-                                  TextSpan(text: '/ ${room.speakers.length} '),
-                                  const WidgetSpan(
-                                    child: Icon(
-                                      CupertinoIcons.chat_bubble_fill,
-                                      size: 18.0,
-                                      color: Colors.grey,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              style: TextStyle(
-                                color: Colors.grey[600],
-                              ),
-                            ),
+                          UserProfileImage(
+                            imageURL: room.speakers[0].imageUrl,
+                            size: 48,
                           )
                         ],
                       ),
-                    )
-                  ],
-                ),
-              ],
-            ),
+                    ),
+                  ),
+                  Expanded(
+                    flex: 2,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        ...room.speakers.map(
+                          (user) => Text(
+                            '${user.givenName} ${user.familyName} 💬',
+                            style: TextStyle(fontSize: 16.0),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 4.0),
+                          child: Text.rich(
+                            TextSpan(
+                              children: [
+                                TextSpan(
+                                    text:
+                                        '${room.speakers.length + room.others.length} '),
+                                const WidgetSpan(
+                                  child: Icon(
+                                    CupertinoIcons.person_fill,
+                                    size: 18.0,
+                                    color: Colors.grey,
+                                  ),
+                                ),
+                                TextSpan(text: '/ ${room.speakers.length} '),
+                                const WidgetSpan(
+                                  child: Icon(
+                                    CupertinoIcons.chat_bubble_fill,
+                                    size: 18.0,
+                                    color: Colors.grey,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            style: TextStyle(
+                              color: Colors.grey[600],
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  )
+                ],
+              ),
+            ],
           ),
         ),
       ),
@@ -604,17 +548,9 @@ class RoomCard extends StatelessWidget {
   }
 }
 
-class ChatList extends StatefulWidget {
-  const ChatList({Key? key}) : super(key: key);
-
-  @override
-  State<ChatList> createState() => _ChatListState();
-}
-
-class _ChatListState extends State<ChatList> {
+class ChatList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return DefaultTabController(
       length: 2,
       child: Scaffold(
