@@ -332,7 +332,7 @@ class HomeScreen extends StatelessWidget {
                 IconButton(
                   onPressed: () => Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (context) => ChatList(),
+                      builder: (context) => BackChannelRoomList(),
                     ),
                   ),
                   icon: Icon(
@@ -549,7 +549,7 @@ class RoomCard extends StatelessWidget {
   }
 }
 
-class ChatList extends StatelessWidget {
+class BackChannelRoomList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -596,7 +596,8 @@ class ChatList extends StatelessWidget {
             ListView.builder(
               itemCount: backChannelRoomsList.length,
               itemBuilder: (context, index) {
-                return ChatCard(backChannelRoom: backChannelRoomsList[index]);
+                return BackChannelRoomCard(
+                    backChannelRoom: backChannelRoomsList[index]);
               },
             ),
             Center(
@@ -612,10 +613,10 @@ class ChatList extends StatelessWidget {
   }
 }
 
-class ChatCard extends StatelessWidget {
+class BackChannelRoomCard extends StatelessWidget {
   final BackChannelRoom backChannelRoom;
 
-  const ChatCard({
+  const BackChannelRoomCard({
     Key? key,
     required this.backChannelRoom,
   }) : super(key: key);
