@@ -596,40 +596,7 @@ class ChatList extends StatelessWidget {
             ListView.builder(
               itemCount: backChannelRoomsList.length,
               itemBuilder: (context, index) {
-                BackChannelRoom backChannelRoom = backChannelRoomsList[index];
-
-                return Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 4.0),
-                      child: ListTile(
-                        leading: UserProfileImage(
-                            imageURL: backChannelRoom.profileImageUrl),
-                        title: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              backChannelRoom.name,
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                            Text(backChannelRoom.message),
-                          ],
-                        ),
-                        trailing: Column(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            Icon(CupertinoIcons.forward),
-                            Text(
-                              backChannelRoom.timestamp,
-                              style: TextStyle(fontSize: 14),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    Divider(indent: 75),
-                  ],
-                );
+                return ChatCard(backChannelRoom: backChannelRoomsList[index]);
               },
             ),
             Center(
@@ -641,6 +608,51 @@ class ChatList extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class ChatCard extends StatelessWidget {
+  final BackChannelRoom backChannelRoom;
+
+  const ChatCard({
+    Key? key,
+    required this.backChannelRoom,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 4.0),
+          child: ListTile(
+            leading:
+                UserProfileImage(imageURL: backChannelRoom.profileImageUrl),
+            title: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  backChannelRoom.name,
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                Text(backChannelRoom.message),
+              ],
+            ),
+            trailing: Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Icon(CupertinoIcons.forward),
+                Text(
+                  backChannelRoom.timestamp,
+                  style: TextStyle(fontSize: 14),
+                ),
+              ],
+            ),
+          ),
+        ),
+        Divider(indent: 75),
+      ],
     );
   }
 }
