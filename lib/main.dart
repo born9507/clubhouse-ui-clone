@@ -15,10 +15,10 @@ class MyApp extends StatelessWidget {
       title: 'Flutter ClubHouse UI',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        appBarTheme: const AppBarTheme(backgroundColor: Palette.background),
+        appBarTheme: AppBarTheme(backgroundColor: Palette.background),
         scaffoldBackgroundColor: Palette.background,
         primaryColor: Colors.white,
-        iconTheme: const IconThemeData(color: Colors.black),
+        iconTheme: IconThemeData(color: Colors.black),
         fontFamily: GoogleFonts.montserrat().fontFamily,
         textTheme: GoogleFonts.montserratTextTheme(),
       ),
@@ -209,7 +209,7 @@ class HomeScreen extends StatelessWidget {
       appBar: AppBar(
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(
+          icon: Icon(
             CupertinoIcons.compass,
             size: 28.0,
             color: Colors.black,
@@ -218,7 +218,7 @@ class HomeScreen extends StatelessWidget {
         ),
         actions: [
           IconButton(
-            icon: const Icon(
+            icon: Icon(
               CupertinoIcons.envelope_open,
               size: 26.0,
               color: Colors.black,
@@ -226,7 +226,7 @@ class HomeScreen extends StatelessWidget {
             onPressed: () {},
           ),
           IconButton(
-            icon: const Icon(
+            icon: Icon(
               CupertinoIcons.calendar,
               size: 28.0,
               color: Colors.black,
@@ -234,7 +234,7 @@ class HomeScreen extends StatelessWidget {
             onPressed: () {},
           ),
           IconButton(
-            icon: const Icon(
+            icon: Icon(
               CupertinoIcons.bell,
               size: 28.0,
               color: Colors.black,
@@ -272,7 +272,7 @@ class HomeScreen extends StatelessWidget {
               children: [
                 IconButton(
                   onPressed: () {},
-                  icon: const Icon(
+                  icon: Icon(
                     CupertinoIcons.circle_grid_3x3_fill,
                     size: 28.0,
                   ),
@@ -300,7 +300,7 @@ class HomeScreen extends StatelessWidget {
                 color: Palette.green,
                 borderRadius: BorderRadius.circular(24.0),
               ),
-              child: const Text.rich(
+              child: Text.rich(
                 TextSpan(
                   children: [
                     WidgetSpan(
@@ -335,7 +335,7 @@ class HomeScreen extends StatelessWidget {
                       builder: (context) => ChatList(),
                     ),
                   ),
-                  icon: const Icon(
+                  icon: Icon(
                     CupertinoIcons.paperplane,
                     size: 28.0,
                   ),
@@ -381,10 +381,11 @@ class UpcomingRooms extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-          color: Palette.secondaryBackground,
-          borderRadius: BorderRadius.circular(20.0)),
+        color: Palette.secondaryBackground,
+        borderRadius: BorderRadius.circular(20.0),
+      ),
       child: Padding(
-        padding: const EdgeInsets.only(left: 32.0, top: 4.0, bottom: 4.0),
+        padding: const EdgeInsets.fromLTRB(32.0, 4.0, 0.0, 4.0),
         child: Column(
           children: upcomingRooms
               .map(
@@ -398,7 +399,7 @@ class UpcomingRooms extends StatelessWidget {
                             top: room.club.isNotEmpty ? 2.0 : 0),
                         child: Text(room.time),
                       ),
-                      const SizedBox(width: 12.0),
+                      SizedBox(width: 12.0),
                       Expanded(
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
@@ -469,7 +470,7 @@ class RoomCard extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              const SizedBox(height: 12.0),
+              SizedBox(height: 12.0),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -513,7 +514,7 @@ class RoomCard extends StatelessWidget {
                                 TextSpan(
                                     text:
                                         '${room.speakers.length + room.others.length} '),
-                                const WidgetSpan(
+                                WidgetSpan(
                                   child: Icon(
                                     CupertinoIcons.person_fill,
                                     size: 18.0,
@@ -521,7 +522,7 @@ class RoomCard extends StatelessWidget {
                                   ),
                                 ),
                                 TextSpan(text: '/ ${room.speakers.length} '),
-                                const WidgetSpan(
+                                WidgetSpan(
                                   child: Icon(
                                     CupertinoIcons.chat_bubble_fill,
                                     size: 18.0,
